@@ -73,18 +73,23 @@ def ismatch(seq,sequencedic):
     global pGEMDIKextended,pGEMDIKextendedreverse
     location=[]
     lookback={}
+    not_the_same_at_all_check=0
     for i in range(10):
         if seq[i*25:(i*25+25)] in sequencedic:
             lookback[i]=sequencedic[seq[i*25:(i*25+25)]][0]
             location.append(sequencedic[seq[i*25:(i*25+25)]][0])
-        else:lookback[i]=False
+        else:
+            lookback[i]=False
+            not_the_same_at_all_check+=1
+    if not_the_same_at_all_check==10:
+        return False
     for i in lookback:
-        if lookback[i]:
+        if type(lookback[i])==type(0):
             index=i
             break
     print(location)
     for i in lookback:
-        if not lookback[i]:
+        if type(lookback[i])==type(False):
             print(seq[i*25:i*25+25],pGEMDIKextended[(lookback[index]-(index-i)*25):((lookback[index]-(index-i)*25)+25)])
                 #if sequencedic[seq[index*25:(index*25+25)][0] > 0:
                 #a=HammingDistance(seq[item*25:item*25+25],pGEMDIKextended[(lookback[index]-(index-item)*25):((lookback[index]-(index-item)*25)+25)],3)
@@ -96,7 +101,7 @@ def ismatch(seq,sequencedic):
                 #if a <=3:
                     #location.append((lookback[index]+(index-item)*25))
                 #else: continue
-                
+
 with gzip.open(r'/mnt/d/Box Sync/Imperiale Lab Notebooks/Linbo Zhao/Projects/BKPyV recombination/20181011 Sequencing Results/Run_2500/imperiale/Sample_118033/118033_GGACTCCT-TATCCTCT_S1_L001_R1_001.fastq.gz', 'rt') as reads, open(r'/mnt/d/Box Sync/Imperiale Lab Notebooks/Linbo Zhao/Projects/BKPyV recombination/20181011 Sequencing Results/Run_2500/imperiale/Sample_118033/collect1', "w") as collect:
     for record in SeqIO.parse(reads,"fastq"):
         if record.seq in pGEMDIKDIC:
