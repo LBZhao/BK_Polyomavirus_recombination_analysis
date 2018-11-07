@@ -61,14 +61,15 @@ def HammingDistance(seq1,seq2,Giveupthreshold):
     Therefore, once the HammingDistance reach Giveupthreshold, this function will just return a huge number indicating that the humming distance is useless.
     '''
     n=0
-    for i in range(len(seq1)):
+    for i in range(25):
         if seq1[i] != seq2[i]:
             n += 1
             if n >= Giveupthreshold:
                 n= 9999
                 break
     return n
-
+'''
+#This function will not be able to solve repetitive sequence problem. Need to modify later.
 def ismatch(seq,sequencedic):
     global pGEMDIKextended,pGEMDIKextendedreverse
     location=[]
@@ -87,25 +88,34 @@ def ismatch(seq,sequencedic):
         if type(lookback[i])==type(0):
             index=i
             break
-    print(location)
     for i in lookback:
         if type(lookback[i])==type(False):
-            print(seq[i*25:i*25+25],pGEMDIKextended[(lookback[index]-(index-i)*25):((lookback[index]-(index-i)*25)+25)])
-                #if sequencedic[seq[index*25:(index*25+25)][0] > 0:
-                #a=HammingDistance(seq[item*25:item*25+25],pGEMDIKextended[(lookback[index]-(index-item)*25):((lookback[index]-(index-item)*25)+25)],3)
-                #if  a<=3:
-                    #location.append((lookback[index]-(index-item)*25))
-                #else: continue
-            #else:
+            if sequencedic[seq[index*25:(index*25+25)]][0] > 0:
+                start=lookback[index]-(index-i)*25
+                end=(lookback[index]-(index-i)*25)+25
+                """Important: this number(8138, the length of pGEM7-DIK)is used to solve the cirular problem."""
+                if start < 0:
+                    start+=8138
+                    end+=8138
+                if HammingDistance(seq[i*25:i*25+25],pGEMDIKextended[start:end],3)<3:
+                    location.append(lookback[index]-(index-i)*25)
+                else: return False
+            else:
+                start=-(lookback[index]+(index-i)*25)+226
+                end=-((lookback[index]+(index-i)*25)-26)+226
+                if start < 0:
+                    start+=8138
+                    end+=8138
+                print(seq[i*25:(i*25+25)],pGEMDIKextendedreverse[start:end],HammingDistance(seq[i*25:(i*25+25)],pGEMDIKextendedreverse[start:end],3))
                 #a=HammingDistance(seq[item*25:(item*25+25)],pGEMDIKextendedreverse[(lookback[index]+(index-item)*25):((lookback[index]+(index-item)*25)+25)],3)
                 #if a <=3:
                     #location.append((lookback[index]+(index-item)*25))
                 #else: continue
-
+'''
 with gzip.open(r'/mnt/d/Box Sync/Imperiale Lab Notebooks/Linbo Zhao/Projects/BKPyV recombination/20181011 Sequencing Results/Run_2500/imperiale/Sample_118033/118033_GGACTCCT-TATCCTCT_S1_L001_R1_001.fastq.gz', 'rt') as reads, open(r'/mnt/d/Box Sync/Imperiale Lab Notebooks/Linbo Zhao/Projects/BKPyV recombination/20181011 Sequencing Results/Run_2500/imperiale/Sample_118033/collect1', "w") as collect:
     for record in SeqIO.parse(reads,"fastq"):
         if record.seq in pGEMDIKDIC:
             pass
         else:
-            ismatch(record.seq,pGEMDIKDIC25)
+
 #            SeqIO.write(record,collect,"fastq")
