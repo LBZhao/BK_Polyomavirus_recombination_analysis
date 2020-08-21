@@ -3,13 +3,33 @@ To use this script. Run blast with command
 blastn -query 'input FASTA file path' -db nt -out 'output file path' -outfmt "10 qseqid qstart qend sstart send frames sseq qseq stitle" -gilist 'GI mask file' -num_threads 3
 Failed to use the -outfmt -outfmt "10 qseqid qstart qend sstart send frames sseq qseq stitle" will cause error.
 The idea of this script is format the blast file to reflect recombination.
+In order to achieve multiple functions with one script, the following options are created:
+-m  output microhomology length in CSV file
+    -d  duplication will be removed from final results
+    -b  output NHEJ and MMEJ break sites, break sites will be output in pairs into CSV file
+        -d  duplication will be removed from final results
+        -s  output break sites in one column into CSV file
+-a  output genome sequence and reads alignment
+    -d  duplication will be removed from final results
+-b  output break sites in pairs into CSV file
+    -d  duplication will be removed from final results
+    -s  output break sites in one column into CSV file
+
 '''
+
+
 import sys
 from Bio import SeqIO
 from Bio.Seq import Seq
 from operator import itemgetter, attrgetter
-homologyset=set()
 
+microhomology_function  = "-m" in sys.argv
+alignment_function      = "-a" in sys.argv
+break_function          = "-b" in sys.argv
+duplication             = "-d" in sys.argv
+single_column           = "-s" in sys.argv
+
+#Define a function to isolate the joint.
 def jointfinder(left,read,right):
     result=[[],[],[]]
     for i in range(251):
@@ -24,49 +44,88 @@ def jointfinder(left,read,right):
     return result
 
 #Define a function to identify microhomology
-def microhomologyfinder(inputdic):
+if duplication:
+    homologyset=set()
+    def microhomologyfinder(inputdic):
 
-    def match(a,b):
-        if a==b:
-            return True
-        elif a=="-":
-            return True
-        elif b=="-":
-            return True
-        else: return False
-    homologylength=0
-    walk=[[],[]]
-    global homologyset
-    temp=''.join(inputdic[1])
-    if temp in homologyset:
-        return(-1)
-    else:
-        homologyset.add(temp)
-        rev_complement=Seq(temp)
-        homologyset.add(str(rev_complement.reverse_complement()))
-    for i in range(len(inputdic[0])):
-        if match(inputdic[0][i],inputdic[1][i]):
-            walk[0].append(True)
-        else: walk[0].append(False)
-        if match(inputdic[1][i],inputdic[2][i]):
-            walk[1].append(True)
-        else: walk[1].append(False)
-    for o in range(len(walk[0])):
-        walkable=True
-        if walk[0][o] and walk[1][o]:
-            for p in range(o):
-                if walk[0][p]==False:
-                    walkable=False
-                    break
-            for q in range(o,len(walk[0])):
-                if walk[1][q]==False:
-                    walkable=False
-                    break
-            if walkable:
-                homologylength+=1
-    return(homologylength)
+        def match(a,b):
+            if a==b:
+                return True
+            elif a=="-":
+                return True
+            elif b=="-":
+                return True
+            else: return False
+        homologylength=0
+        walk=[[],[]]
+        global homologyset
+        temp=''.join(inputdic[1])
+        if temp in homologyset:
+            return(-1)
+        else:
+            homologyset.add(temp)
+            rev_complement=Seq(temp)
+            homologyset.add(str(rev_complement.reverse_complement()))
+        for i in range(len(inputdic[0])):
+            if match(inputdic[0][i],inputdic[1][i]):
+                walk[0].append(True)
+            else: walk[0].append(False)
+            if match(inputdic[1][i],inputdic[2][i]):
+                walk[1].append(True)
+            else: walk[1].append(False)
+        for o in range(len(walk[0])):
+            walkable=True
+            if walk[0][o] and walk[1][o]:
+                for p in range(o):
+                    if walk[0][p]==False:
+                        walkable=False
+                        break
+                for q in range(o,len(walk[0])):
+                    if walk[1][q]==False:
+                        walkable=False
+                        break
+                if walkable:
+                    homologylength+=1
+        return(homologylength)
 
-#Define a function that format and print microhomology
+else:
+    def microhomologyfinder(inputdic):
+
+        def match(a,b):
+            if a==b:
+                return True
+            elif a=="-":
+                return True
+            elif b=="-":
+                return True
+            else: return False
+        homologylength=0
+        walk=[[],[]]
+        global homologyset
+        temp=''.join(inputdic[1])
+        for i in range(len(inputdic[0])):
+            if match(inputdic[0][i],inputdic[1][i]):
+                walk[0].append(True)
+            else: walk[0].append(False)
+            if match(inputdic[1][i],inputdic[2][i]):
+                walk[1].append(True)
+            else: walk[1].append(False)
+        for o in range(len(walk[0])):
+            walkable=True
+            if walk[0][o] and walk[1][o]:
+                for p in range(o):
+                    if walk[0][p]==False:
+                        walkable=False
+                        break
+                for q in range(o,len(walk[0])):
+                    if walk[1][q]==False:
+                        walkable=False
+                        break
+                if walkable:
+                    homologylength+=1
+        return(homologylength)
+
+#Define a function that formats and prints microhomology
 def printmicrohomology(output1,output2,output3):
     #print section 1
     print('%8s' % leftsubjectstart + '  ' + output1[:100] + ' '*3 + "DIK")
@@ -110,17 +169,26 @@ for record in SeqIO.parse('./BK_DIK_NCCR2000.fas', "fasta"):
     BKloop=record.seq.upper()
     BKloopr=BKloop.reverse_complement()
 genomelength=len(BKloop)
-#Read BLAST result.
-nonhomocatch=[]
-yeshomocatch=[]
+
+
 #Read Blast result
 inp=open(sys.argv[1][:-4],'r')
 oneline=inp.readline()
 updated=False
 
-nonhomo=open('./%sNonhomology01.csv' % sys.argv[1][:-4],'w+')
-yeshomo=open('./%sYeshomo01.csv' % sys.argv[1][:-4],'w+')
-#Define a function to isolate the joint.
+if microhomology_function:
+    microhomologylengh=[]
+    nonhomocatch=[]
+    yeshomocatch=[]
+    lengthhomo_file=open('./%s_HomeLength.csv' % sys.argv[1][:-4],'w+')
+    if break_function:
+        nonhomo_file=open('./%s_NHEJ.csv' % sys.argv[1][:-4],'w+')
+        yeshomo_file=open('./%s_MMEJ.csv' % sys.argv[1][:-4],'w+')
+else:
+    if break_function:
+        breakcatch=[]
+        breakpoint_file=open('./%s_Breakpoints.csv' % sys.argv[1][:-4],'w+')
+
 
 
 
@@ -200,8 +268,12 @@ for record in SeqIO.parse(sys.argv[1], "fasta"):
         rightsubjectend=recombination_result[j+1][4]
         rightdirection=recombination_result[j+1][5]
 
-
-
+        '''
+        This part align readings into 3 lines.
+        output1     the left part BLAST result.
+        output2     the READ.
+        output3     the right part BLAST result.
+        '''
 
         if leftdirection=='1/1':
             output1=' '*(leftstart-1) + leftsubject + BKloop[leftsubjectend:leftsubjectend+10]+' '*(241-leftend)
@@ -213,82 +285,56 @@ for record in SeqIO.parse(sys.argv[1], "fasta"):
         else:
             output3=' '*(rightstart-11) +BKloopr[genomelength-rightsubjectstart-10:genomelength-rightsubjectstart]+ rightsubject + ' '*(251-rightend)
 
-        temp=microhomologyfinder(jointfinder(output1,output2,output3))
-        if temp == 0 or temp ==1:
-            nonhomocatch.append((leftsubjectend,rightsubjectstart))
-        if temp > 1:
-            yeshomocatch.append((leftsubjectend,rightsubjectstart))
-
-        #print("leftstart:"+str(leftstart)+"  rightstart:"+str(rightstart)+"    leftsubjectend:"+str(leftsubjectend)+"    rightsubjectstart:"+str(rightsubjectstart))
-        #print(microhomologyfinder(jointfinder(output1,output2,output3)))
-        #print(printmicrohomology(output1,output2,output3))
+        if alignment_function:
+            temp = microhomologyfinder(jointfinder(output1,output2,output3))
+            if temp >=0:
+                print(printmicrohomology(output1,output2,output3))
 
 
-for item in nonhomocatch:
-    (a,b)=item
-    if (b,a) in nonhomocatch:
-        print("duplication found")
-        if a>b:
-            nonhomo.write(str(a)+'\n'+str(b)+'\n')
-    else:
-        nonhomo.write(str(a)+'\n'+str(b)+'\n')
-for item in yeshomocatch:
-    (a,b)=item
-    if (b,a) in yeshomocatch:
-        print("duplication found")
-        if a>b:
-            nonhomo.write(str(a)+'\n'+str(b)+'\n')
-    else:
-        nonhomo.write(str(a)+'\n'+str(b)+'\n')
-nonhomo.close()
-yeshomo.close()
+        if microhomology_function:
+            temp=microhomologyfinder(jointfinder(output1,output2,output3))
+            if temp>-1:
+                microhomologylengh.append(temp)
+            if temp == 0 or temp ==1:
+                nonhomocatch.append((leftsubjectend,rightsubjectstart))
+            if temp > 1:
+                yeshomocatch.append((leftsubjectend,rightsubjectstart))
+        else:
+            temp=microhomologyfinder(jointfinder(output1,output2,output3))
+            if break_function:
+                if temp >=-1:
+                    breakcatch.append((leftsubjectend,rightsubjectstart))
 
 
-'''
-leftbreakpoint.append(leftsubjectend)
-totalbreakpoint.append(leftsubjectend)
-rightbreakpoint.append(rightsubjectstart)
-
-if leftsubjectend in (2191,2235,2240,2247) and rightsubjectstart in (2191,2235,2240,2247):
-    #SeqIO.write(record, recombi_readings, "fasta")
-    pass
-totalbreakpoint.append((leftsubjectend,rightsubjectstart))
-
-m += 1
-
-
-This part align readings into 3 lines.
-output1     the left part BLAST result.
-output2     the READ.
-output3     the right part BLAST result.
-This part is complicated because blast will put insert or deletion into the output sequence.
-
-
-
-    print('\n')
-    for i in jointfinder(output1,output2,output3):
-        print("".join(i))
-
-    print('\n')
-
-
-#leftbreak=open('./leftbreak.csv','w+')
-#rightbreak=open('./rightbreak.csv','w+')
-totalbreak=open('./%s.csv' % sys.argv[1][:-4],'w+')
-
-for item in leftbreakpoint:
-    leftbreak.write(str(item)+'\n')
-    totalbreak.write(str(item)+'\n')
-for item in rightbreakpoint:
-    rightbreak.write(str(item)+'\n')
-    totalbreak.write(str(item)+'\n')
-
-for item in totalbreakpoint:
-    (a,b)=item
-    totalbreak.write(str(a)+'\n'+str(b)+'\n')
-
-#leftbreak.close()
-#rightbreak.close()
-totalbreak.close()
-#recombi_readings.close()
-'''
+if microhomology_function:
+    for item in homologylength:
+        lengthhomo_file.write(str(item)+'\n')
+    if break_function:
+        if single_column:
+            for item in nonhomocatch:
+                (a,b)=item
+                nonhomo_file.write(str(a)+'\n'+str(b)+'\n')
+            for item in yeshomocatch:
+                (a,b)=item
+                yeshomo_file.write(str(a)+'\n'+str(b)+'\n')
+        else:
+            for item in nonhomocatch:
+                (a,b)=item
+                nonhomo_file.write(str(a)+','+str(b)+'\n')
+            for item in yeshomocatch:
+                (a,b)=item
+                yeshomo_file.write(str(a)+','+str(b)+'\n')
+        nonhomo_file.close()
+        yeshomo_file.close()
+    lengthhomo_file.close()
+else:
+    if break_function:
+        if single_column:
+            for item in breakcatch:
+                (a,b)=item
+                breakpoint_file.write(str(a)+'\n'+str(b)+'\n')
+        else:
+            for item in breakcatch:
+                (a,b)=item
+                breakpoint_file.write(str(a)+','+str(b)+'\n')
+    breakpoint_file.close()
