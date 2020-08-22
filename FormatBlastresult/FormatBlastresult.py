@@ -29,6 +29,7 @@ break_function          = "-b" in sys.argv
 duplication             = "-d" in sys.argv
 single_column           = "-s" in sys.argv
 
+print(sys.argv)
 #Define a function to isolate the joint.
 def jointfinder(left,read,right):
     result=[[],[],[]]
@@ -307,7 +308,7 @@ for record in SeqIO.parse(sys.argv[1], "fasta"):
 
 
 if microhomology_function:
-    for item in homologylength:
+    for item in microhomologylengh:
         lengthhomo_file.write(str(item)+'\n')
     if break_function:
         if single_column:
@@ -337,4 +338,4 @@ else:
             for item in breakcatch:
                 (a,b)=item
                 breakpoint_file.write(str(a)+','+str(b)+'\n')
-    breakpoint_file.close()
+        breakpoint_file.close()
