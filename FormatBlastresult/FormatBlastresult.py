@@ -9,7 +9,7 @@ In order to achieve multiple functions with one script, the following options ar
     -b  output NHEJ and MMEJ break sites, break sites will be output in pairs into CSV file
         -d  duplication will be removed from final results
         -s  output break sites in one column into CSV file
--a  output genome sequence and reads alignment
+-a  output genome sequence and reads alignment to screen
     -d  duplication will be removed from final results
 -b  output break sites in pairs into CSV file
     -d  duplication will be removed from final results
