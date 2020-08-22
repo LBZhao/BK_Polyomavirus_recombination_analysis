@@ -48,7 +48,6 @@ def jointfinder(left,read,right):
 if duplication:
     homologyset=set()
     def microhomologyfinder(inputdic):
-
         def match(a,b):
             if a==b:
                 return True
@@ -91,7 +90,6 @@ if duplication:
 
 else:
     def microhomologyfinder(inputdic):
-
         def match(a,b):
             if a==b:
                 return True
@@ -156,8 +154,8 @@ def printmicrohomology(output1,output2,output3):
         print('%8s' % (rightsubjectstart+200)+'  '+output3[200:]+ '  ' + '%5s' % rightdirection + '  '+ '3\'end-'+'%-8s' % rightsubjectend + ' '*3+"DIK")
     else:
         print('%8s' % (rightsubjectstart-200)+'  '+output3[200:]+ '  ' + '%5s' % rightdirection + '  '+ '3\'end-'+'%-8s' % rightsubjectend + ' '*3+"DIK")
-    return(0)
     #Print Space between formated results
+    print('\n')
     print('\n')
     print('\n')
 
@@ -289,7 +287,7 @@ for record in SeqIO.parse(sys.argv[1], "fasta"):
         if alignment_function:
             temp = microhomologyfinder(jointfinder(output1,output2,output3))
             if temp >=0:
-                print(printmicrohomology(output1,output2,output3))
+                printmicrohomology(output1,output2,output3)
 
 
         if microhomology_function:
@@ -303,7 +301,7 @@ for record in SeqIO.parse(sys.argv[1], "fasta"):
         else:
             temp=microhomologyfinder(jointfinder(output1,output2,output3))
             if break_function:
-                if temp >=-1:
+                if temp >-1:
                     breakcatch.append((leftsubjectend,rightsubjectstart))
 
 
