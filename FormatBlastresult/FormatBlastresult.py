@@ -5,6 +5,8 @@ Failed to use the -outfmt -outfmt "10 qseqid qstart qend sstart send frames sseq
 The idea of this script is format the blast file to reflect recombination.
 In order to achieve multiple functions with one script, the following options are created:
 -m  output microhomology length in CSV file
+    -n  non-gap, gap will not be considered as match in this mode
+        for example, AATAA and AA-AA is considered as a match without this mode.
     -d  duplication will be removed from final results
     -b  output NHEJ and MMEJ break sites, break sites will be output in pairs into CSV file
         -d  duplication will be removed from final results
@@ -23,6 +25,7 @@ from Bio.Seq import Seq
 from operator import itemgetter, attrgetter
 
 microhomology_function  = "-m" in sys.argv
+non_gap_function        = "-n" in sys.argv
 alignment_function      = "-a" in sys.argv
 break_function          = "-b" in sys.argv
 duplication             = "-d" in sys.argv
@@ -46,14 +49,20 @@ def jointfinder(left,read,right):
 if duplication:
     homologyset=set()
     def microhomologyfinder(inputdic):
-        def match(a,b):
-            if a==b:
-                return True
-            elif a=="-":
-                return True
-            elif b=="-":
-                return True
-            else: return False
+        if non_gap_function:
+            def match(a,b):
+                if a==b:
+                    return True
+                else: return False
+        else:
+            def match(a,b):
+                if a==b:
+                    return True
+                elif a=="-":
+                    return True
+                elif b=="-":
+                    return True
+                else: return False
         homologylength=0
         walk=[[],[]]
         global homologyset
@@ -88,14 +97,20 @@ if duplication:
 
 else:
     def microhomologyfinder(inputdic):
-        def match(a,b):
-            if a==b:
-                return True
-            elif a=="-":
-                return True
-            elif b=="-":
-                return True
-            else: return False
+        if non_gap_function:
+            def match(a,b):
+                if a==b:
+                    return True
+                else: return False
+        else:
+            def match(a,b):
+                if a==b:
+                    return True
+                elif a=="-":
+                    return True
+                elif b=="-":
+                    return True
+                else: return False
         homologylength=0
         walk=[[],[]]
         global homologyset
