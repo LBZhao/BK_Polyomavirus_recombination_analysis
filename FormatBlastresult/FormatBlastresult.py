@@ -14,7 +14,6 @@ In order to achieve multiple functions with one script, the following options ar
 -b  output break sites in pairs into CSV file
     -d  duplication will be removed from final results
     -s  output break sites in one column into CSV file
-
 '''
 
 
@@ -29,7 +28,6 @@ break_function          = "-b" in sys.argv
 duplication             = "-d" in sys.argv
 single_column           = "-s" in sys.argv
 
-print(sys.argv)
 #Define a function to isolate the joint.
 def jointfinder(left,read,right):
     result=[[],[],[]]
@@ -179,7 +177,7 @@ if microhomology_function:
     microhomologylengh=[]
     nonhomocatch=[]
     yeshomocatch=[]
-    lengthhomo_file=open('./%s_HomeLength.csv' % sys.argv[1][:-4],'w+')
+    lengthhomo_file=open('./%s_HomoLength.csv' % sys.argv[1][:-4],'w+')
     if break_function:
         nonhomo_file=open('./%s_NHEJ.csv' % sys.argv[1][:-4],'w+')
         yeshomo_file=open('./%s_MMEJ.csv' % sys.argv[1][:-4],'w+')
