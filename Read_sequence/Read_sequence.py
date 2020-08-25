@@ -15,8 +15,6 @@ def Extension(path,n):
 DIKextended,DIKextendedreverse=Extension(r"./BK_Dik.fasta",250)
 #Circularize pGEM7-DIK plasmid by adding 250bp from the beginning
 pGEMDIKextended,pGEMDIKextendedreverse=Extension(r"./pGEM7-DIK.fasta",250)
-#print((DUNextended==DUNextendedreverse),(DIKextended==DIKextendedreverse),(pGEMDIKextended==pGEMDIKextendedreverse))
-
 
 def DicBuild(sequence,reversecomplementsequence,lenth):
     sequencedic={}
