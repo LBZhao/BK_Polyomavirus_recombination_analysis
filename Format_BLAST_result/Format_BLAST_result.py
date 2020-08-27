@@ -172,11 +172,6 @@ def printmicrohomology(output1,output2,output3):
     print('\n')
     print('\n')
 
-
-
-
-#recombi_readings=open('./specific_recombination.fas','w+')
-
 for record in SeqIO.parse('./BK_DIK_NCCR2000.fas', "fasta"):
     BKloop=record.seq.upper()
     BKloopr=BKloop.reverse_complement()
@@ -261,7 +256,6 @@ for record in SeqIO.parse(sys.argv[1], "fasta"):
     #Starting from this line. All information that is necesssory to build the graph will be acquired.
     rightend=0
     n=len(recombination_result)
-    #print(n,recombination_result)
     for j in range(n-1):
         leftstart=recombination_result[j][1]
         leftsubject=recombination_result[j][6]
