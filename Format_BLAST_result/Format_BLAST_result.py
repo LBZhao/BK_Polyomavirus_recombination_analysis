@@ -172,7 +172,7 @@ def printmicrohomology(output1,output2,output3):
     print('\n')
     print('\n')
 
-for record in SeqIO.parse('./BK_DIK_NCCR2000.fas', "fasta"):
+for record in SeqIO.parse('./BK_DIK_NCCR2000.fasta', "fasta"):
     BKloop=record.seq.upper()
     BKloopr=BKloop.reverse_complement()
 genomelength=len(BKloop)
