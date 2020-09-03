@@ -1,5 +1,6 @@
 # This script will create a circular diagram
 # This script will take options
+# example command in powershell: FOR %G IN (*.csv) DO Rscript "DIK_recombination_graph.R" %G
 # -N  diagram of NCCR
 # -T  diagram of total genome
 
