@@ -16,6 +16,17 @@ In order to achieve multiple functions with one script, the following options ar
 -b  output break sites in pairs into CSV file
     -d  duplication will be removed from final results
     -s  output break sites in one column into CSV file
+
+Example Bash command:
+    faslist=`ls ./*.fas`
+    for eachfile in $faslist
+    do
+        python ./Format_Blast_result.py  $eachfile
+    done
+
+Example BLAST command:
+    blastdbcmd -db nt -taxids 9606 -outfmt %g > taxid9606.gi
+    blastn -query ./input.fas -db nt -out ./output -gilist taxi9606.gi -outfmt "10 qseqid qstart qend sstart send frames sseq qseq stitle" -num_threads 4
 '''
 
 

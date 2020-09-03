@@ -16,6 +16,12 @@ In order to achieve multiple functions with one script, the following options ar
 -b  output break sites in pairs into CSV file
     -d  duplication will be removed from final results
     -s  output break sites in one column into CSV file
+Example Bash command:
+    faslist=`ls ./*.fas`
+    for eachfile in $faslist
+    do
+        python ./Format_Blast_result.py  $eachfile
+    done
 '''
 
 
