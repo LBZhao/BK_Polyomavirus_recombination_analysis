@@ -11,11 +11,6 @@ def Extension(path,n):
     inputextendedreverse=inputextended.reverse_complement().upper()
     return(str(inputextended),str(inputextendedreverse))
 
-#Circularize BKPyV DIK Genome by adding 250bp from the beginning
-DIKextended,DIKextendedreverse=Extension(r"./BK_Dik.fasta",250)
-#Circularize pGEM7-DIK plasmid by adding 250bp from the beginning
-pGEMDIKextended,pGEMDIKextendedreverse=Extension(r"./pGEM7-DIK.fasta",250)
-
 def DicBuild(sequence,reversecomplementsequence,lenth):
     sequencedic={}
     for i in range(len(sequence)-(lenth-1)):
@@ -28,6 +23,11 @@ def DicBuild(sequence,reversecomplementsequence,lenth):
         else:sequencedic[reversecomplementsequence[i:i+lenth]].append(-i-1)
     return(sequencedic)
 
+
+#Circularize BKPyV DIK Genome by adding 250bp from the beginning
+DIKextended,DIKextendedreverse=Extension(r"./BK_Dik.fasta",250)
+#Circularize pGEM7-DIK plasmid by adding 250bp from the beginning
+pGEMDIKextended,pGEMDIKextendedreverse=Extension(r"./pGEM7-DIK.fasta",250)
 
 #Build a dictionary for BKPyV DIK
 DIKDIC=DicBuild(DIKextended,DIKextendedreverse,251)

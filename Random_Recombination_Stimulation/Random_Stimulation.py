@@ -1,0 +1,90 @@
+'''
+This script is used to stimulate homologylength during random recombination.
+'''
+import sys
+import random
+from Bio import SeqIO
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
+
+def Extension(path,n):
+    input=SeqIO.read(path,"fasta")
+    inputextended=input.seq.upper()+input.seq[:n].upper()
+    inputextendedcomplement=inputextended.complement().upper()
+    return(str(inputextended),str(inputextendedcomplement))
+
+def ListBuild(sequence,lenth):
+    sequenced_list=[]
+    for i in range(len(sequence)-(lenth-1)):
+        sequenced_list.append([sequence[i:i+lenth]])
+    return(sequenced_list))
+
+def Pair(a,b):
+    if a == "A" and b=="T" or a=="T" and b=="A":
+        return(True)
+    elif a== "G" and b== "C" or a=="C" and b=="G":
+        return(True)
+    else: return(False)
+
+def Homologylength(a,b):
+    n=0
+    if Pair(a[12],b[12]):
+        for i in range(12):
+            if Pair(a[12+i],b[12+i]):
+                n += 1
+            else: break
+        for i in range(12):
+            if Pair(a[11-i],b[11-i]):
+                n += 1
+            else: break
+        return(n)
+    elif Pair(a[12],b[13]):
+        for i in range(12):
+            if Pair(a[12+i],b[13+i]):
+                n += 1
+            else: break
+        for i in range(12):
+            if Pair(a[11-i],b[12-i]):
+                n += 1
+            else: break
+        return(n)
+    elif Pair(a[13],b[12]):
+        for i in range(12):
+            if Pair(a[13+i],b[12+i]):
+                n += 1
+            else: break
+        for i in range(12):
+            if Pair(a[12-i],b[11-i]):
+                n += 1
+            else: break
+        return(n)
+    elif Pair(a[13],b[13]):
+        for i in range(12):
+            if Pair(a[13+i],b[13+i]):
+                n += 1
+            else: break
+        for i in range(12):
+            if Pair(a[12-i],b[12-i]):
+                n += 1
+            else: break
+        return(n)
+    else: return(n)
+
+#Build a dictionary for BKPyV DIK
+a,b=Extension(r"./BK_Dik.fasta",25)
+DIK26=ListBuild(a,26)
+DIKC26=ListBuild(b,26)
+del a,b
+
+lenth=len(DIK26)
+lenthc=len(DIKC26)
+
+Homologylength_result={}
+for i in range(27):
+    Homologylength_result[i]=0
+for i in range(sys.argv[1]):
+    left=random.randint(1,lenth)
+    right=random.randint(1,lenthc)
+    Homologylength_result[Homologylength(DIK26[left],DIKC26[right])]+=1
+for i in range(27):
+    print ('{:<10}{:<10}'.format(str(i),str(Homologylength_result[i]))
