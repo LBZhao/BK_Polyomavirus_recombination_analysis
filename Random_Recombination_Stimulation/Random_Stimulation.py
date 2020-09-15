@@ -1,6 +1,7 @@
 '''
 This script is used to stimulate homologylength during random recombination.
 '''
+
 import sys
 import random
 from Bio import SeqIO
@@ -16,8 +17,8 @@ def Extension(path,n):
 def ListBuild(sequence,lenth):
     sequenced_list=[]
     for i in range(len(sequence)-(lenth-1)):
-        sequenced_list.append([sequence[i:i+lenth]])
-    return(sequenced_list))
+        sequenced_list.append(sequence[i:i+lenth])
+    return(sequenced_list)
 
 def Pair(a,b):
     if a == "A" and b=="T" or a=="T" and b=="A":
@@ -26,6 +27,7 @@ def Pair(a,b):
         return(True)
     else: return(False)
 
+extension = 26
 def Homologylength(a,b):
     n=0
     if Pair(a[12],b[12]):
@@ -35,26 +37,6 @@ def Homologylength(a,b):
             else: break
         for i in range(12):
             if Pair(a[11-i],b[11-i]):
-                n += 1
-            else: break
-        return(n)
-    elif Pair(a[12],b[13]):
-        for i in range(12):
-            if Pair(a[12+i],b[13+i]):
-                n += 1
-            else: break
-        for i in range(12):
-            if Pair(a[11-i],b[12-i]):
-                n += 1
-            else: break
-        return(n)
-    elif Pair(a[13],b[12]):
-        for i in range(12):
-            if Pair(a[13+i],b[12+i]):
-                n += 1
-            else: break
-        for i in range(12):
-            if Pair(a[12-i],b[11-i]):
                 n += 1
             else: break
         return(n)
@@ -70,10 +52,11 @@ def Homologylength(a,b):
         return(n)
     else: return(n)
 
+
 #Build a dictionary for BKPyV DIK
-a,b=Extension(r"./BK_Dik.fasta",25)
-DIK26=ListBuild(a,26)
-DIKC26=ListBuild(b,26)
+a,b=Extension(r"./BK_Dik.fasta",extension-1)
+DIK26=ListBuild(a,extension)
+DIKC26=ListBuild(b,extension)
 del a,b
 
 lenth=len(DIK26)
@@ -82,9 +65,9 @@ lenthc=len(DIKC26)
 Homologylength_result={}
 for i in range(27):
     Homologylength_result[i]=0
-for i in range(sys.argv[1]):
-    left=random.randint(1,lenth)
-    right=random.randint(1,lenthc)
+for i in range(int(sys.argv[1])):
+    left=random.randint(0,lenth-1)
+    right=random.randint(0,lenthc-1)
     Homologylength_result[Homologylength(DIK26[left],DIKC26[right])]+=1
 for i in range(27):
-    print ('{:<10}{:<10}'.format(str(i),str(Homologylength_result[i]))
+    print ('{:<10}{:<10}'.format(str(i),str(float(Homologylength_result[i])/float(sys.argv[1])*100)))
