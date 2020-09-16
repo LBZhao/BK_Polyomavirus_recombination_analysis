@@ -11,8 +11,7 @@ from Bio.SeqRecord import SeqRecord
 def Extension(path,n):
     input=SeqIO.read(path,"fasta")
     inputextended=input.seq.upper()+input.seq[:n].upper()
-    inputextendedcomplement=inputextended.complement().upper()
-    return(str(inputextended),str(inputextendedcomplement))
+    return(inputextended)
 
 def ListBuild(sequence,lenth):
     sequenced_list=[]
@@ -29,6 +28,7 @@ def Pair(a,b):
 
 extension = 26
 def Homologylength(a,b):
+    b=b.complement()
     n=0
     if Pair(a[12],b[12]):
         for i in range(12):
@@ -54,20 +54,20 @@ def Homologylength(a,b):
 
 
 #Build a dictionary for BKPyV DIK
-a,b=Extension(r"./BK_Dik.fasta",extension-1)
-DIK26=ListBuild(a,extension)
-DIKC26=ListBuild(b,extension)
-del a,b
+temp=Extension(r"./BK_Dik.fasta",extension-1)
+DIK26=ListBuild(temp,extension)
+del temp
 
 lenth=len(DIK26)
-lenthc=len(DIKC26)
 
 Homologylength_result={}
 for i in range(27):
     Homologylength_result[i]=0
 for i in range(int(sys.argv[1])):
     left=random.randint(0,lenth-1)
-    right=random.randint(0,lenthc-1)
-    Homologylength_result[Homologylength(DIK26[left],DIKC26[right])]+=1
+    right=random.randint(0,lenth-1)
+    if left == right:
+        continue
+    Homologylength_result[Homologylength(DIK26[left],DIK26[right])]+=1
 for i in range(27):
     print ('{:<10}{:<10}'.format(str(i),str(float(Homologylength_result[i])/float(sys.argv[1])*100)))
