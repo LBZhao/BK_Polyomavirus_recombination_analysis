@@ -31,7 +31,7 @@ def Homologylength(a,b):
     b=b.complement()
     n=0
     if Pair(a[12],b[12]):
-        for i in range(12):
+        for i in range(14):
             if Pair(a[12+i],b[12+i]):
                 n += 1
             else: break
@@ -41,11 +41,11 @@ def Homologylength(a,b):
             else: break
         return(n)
     elif Pair(a[13],b[13]):
-        for i in range(12):
+        for i in range(13):
             if Pair(a[13+i],b[13+i]):
                 n += 1
             else: break
-        for i in range(12):
+        for i in range(13):
             if Pair(a[12-i],b[12-i]):
                 n += 1
             else: break
@@ -55,10 +55,10 @@ def Homologylength(a,b):
 
 #Build a dictionary for BKPyV DIK
 temp=Extension(r"./BK_Dik.fasta",extension-1)
-DIK26=ListBuild(temp,extension)
+DIK_set=ListBuild(temp,extension)
 del temp
 
-lenth=len(DIK26)
+lenth=len(DIK_set)
 
 Homologylength_result={}
 for i in range(27):
@@ -68,6 +68,6 @@ for i in range(int(sys.argv[1])):
     right=random.randint(0,lenth-1)
     if left == right:
         continue
-    Homologylength_result[Homologylength(DIK26[left],DIK26[right])]+=1
+    Homologylength_result[Homologylength(DIK_set[left],DIK_set[right])]+=1
 for i in range(27):
     print ('{:<10}{:<10}'.format(str(i),str(float(Homologylength_result[i])/float(sys.argv[1])*100)))
