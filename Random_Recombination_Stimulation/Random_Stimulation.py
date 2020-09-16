@@ -1,12 +1,14 @@
 '''
-This script is used to stimulate homologylength during random recombination.
+This script is used to stimulate homology length during random recombination.
+The hypothesis is that double-stranded DNA damage will generate various ends at BK polyomavirus replication foci.
+Damage ends will randomly anneal at the joining site. If no base-pairs form during annealing, DNA ends will be joined directly.
+Test number is passed to this scrpit as variable.
 '''
 
 import sys
 import random
 from Bio import SeqIO
 from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 
 def Extension(path,n):
     input=SeqIO.read(path,"fasta")
@@ -60,10 +62,12 @@ del temp
 
 lenth=len(DIK_set)
 
+try: test_times = int(sys.argv[1])
+except: test_times = 1000
 Homologylength_result={}
 for i in range(27):
     Homologylength_result[i]=0
-for i in range(int(sys.argv[1])):
+for i in range(test_times):
     left=random.randint(0,lenth-1)
     right=random.randint(0,lenth-1)
     if left == right:
