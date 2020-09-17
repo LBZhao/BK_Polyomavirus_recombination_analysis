@@ -2,7 +2,9 @@
 This script is used to stimulate homology length during random recombination.
 The hypothesis is that double-stranded DNA damage will generate various ends at BK polyomavirus replication foci.
 Damage ends will randomly anneal at the joining site. If no base-pairs form during annealing, DNA ends will be joined directly.
-Test number is passed to this scrpit as variable.
+Test number is passed to this scrpit as variable. Default test times is 2000.
+Example:
+python Random_stimulation.py 3000
 '''
 
 import sys
@@ -63,7 +65,7 @@ del temp
 lenth=len(DIK_set)
 
 try: test_times = int(sys.argv[1])
-except: test_times = 1000
+except: test_times = 2000
 Homologylength_result={}
 for i in range(27):
     Homologylength_result[i]=0
