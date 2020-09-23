@@ -71,6 +71,28 @@ def Homologylength_end(a,b):
             max=i+1
     return(max)
 
+def Homologylength_end_invasion(a,b):
+    b=b.complement()
+    n=0
+    if Pair(a[25],b[12]):
+        for i in range(12):
+            if Pair(a[25-i],b[12-i]):
+                n += 1
+            else: break
+        return(n)
+    elif Pair(a[25],b[13]):
+        for i in range(13):
+            if Pair(a[15-i],b[13-i]):
+                n += 1
+            else: break
+        return(n)
+    else: return(n)
+
+
+
+
+
+
 #Build a dictionary for BKPyV DIK
 temp=Extension(r"./BK_Dik.fasta",extension-1)
 DIK_set=ListBuild(temp,extension)
@@ -88,7 +110,8 @@ for i in range(test_times):
     right=random.randint(0,lenth-1)
     if left == right:
         continue
-    Homologylength_result[Homologylength(DIK_set[left],DIK_set[right])]+=1
+    #Homologylength_result[Homologylength(DIK_set[left],DIK_set[right])]+=1
     #Homologylength_result[Homologylength_end(DIK_set[left],DIK_set[right])]+=1
+    Homologylength_result[Homologylength_end_invasion(DIK_set[left],DIK_set[right])]+=1
 for i in range(27):
     print ('{:<10}{:<10}'.format(str(i),str(float(Homologylength_result[i])/float(sys.argv[1])*100)))
