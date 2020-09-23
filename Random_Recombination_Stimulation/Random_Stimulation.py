@@ -56,6 +56,20 @@ def Homologylength(a,b):
         return(n)
     else: return(n)
 
+def Homologylength_end(a,b):
+    b=b.complement()
+    max=0
+    for i in range(15):
+        walkable = True
+        for j in range(i+1):
+            if Pair(a[25-i+j],b[j]):
+                pass
+            else:
+                walkable = False
+                break
+        if walkable:
+            max=i+1
+    return(max)
 
 #Build a dictionary for BKPyV DIK
 temp=Extension(r"./BK_Dik.fasta",extension-1)
@@ -75,5 +89,6 @@ for i in range(test_times):
     if left == right:
         continue
     Homologylength_result[Homologylength(DIK_set[left],DIK_set[right])]+=1
+    #Homologylength_result[Homologylength_end(DIK_set[left],DIK_set[right])]+=1
 for i in range(27):
     print ('{:<10}{:<10}'.format(str(i),str(float(Homologylength_result[i])/float(sys.argv[1])*100)))
