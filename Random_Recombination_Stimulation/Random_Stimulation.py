@@ -102,16 +102,28 @@ lenth=len(DIK_set)
 
 try: test_times = int(sys.argv[1])
 except: test_times = 2000
+try: test_repeats = int(sys.argv[2])
+except: test_repeats = 1
+combined_result=[]
 Homologylength_result={}
-for i in range(27):
-    Homologylength_result[i]=0
-for i in range(test_times):
-    left=random.randint(0,lenth-1)
-    right=random.randint(0,lenth-1)
-    if left == right:
-        continue
-    #Homologylength_result[Homologylength(DIK_set[left],DIK_set[right])]+=1
-    #Homologylength_result[Homologylength_end(DIK_set[left],DIK_set[right])]+=1
-    Homologylength_result[Homologylength_end_invasion(DIK_set[left],DIK_set[right])]+=1
-for i in range(27):
-    print ('{:<10}{:<10}'.format(str(i),str(float(Homologylength_result[i])/float(sys.argv[1])*100)))
+for i in range(test_repeats):
+    for j in range(27):
+        Homologylength_result[j]=0
+    for k in range(test_times):
+        left=random.randint(0,lenth-1)
+        right=random.randint(0,lenth-1)
+        if left == right:
+            continue
+        Homologylength_result[Homologylength(DIK_set[left],DIK_set[right])]+=1
+        #Homologylength_result[Homologylength_end(DIK_set[left],DIK_set[right])]+=1
+        #Homologylength_result[Homologylength_end_invasion(DIK_set[left],DIK_set[right])]+=1
+    temp=[]
+    for l in range(27):
+        #print ('{:<10}{:<10}'.format(str(i),str(float(Homologylength_result[i])/float(sys.argv[1])*100)))
+        temp.append(float(Homologylength_result[l])/float(sys.argv[1])*100)
+    combined_result.append(temp)
+for i in range(15):
+    for j in range(test_repeats):
+        if j < test_repeats-1:
+            print('{:.2f}'.format(float(combined_result[j][i])), end = ',')
+        else: print('{:.2f}'.format(float(combined_result[j][i])))
