@@ -2,15 +2,95 @@
 This script is used to stimulate homology length during random recombination.
 The hypothesis is that double-stranded DNA damage will generate various ends at BK polyomavirus replication foci.
 Damage ends will randomly anneal at the joining site. If no base-pairs form during annealing, DNA ends will be joined directly.
-Test number is passed to this scrpit as variable. Default test times is 2000.
-Example:
-python Random_stimulation.py 3000
+Test number and repeat times are passed to this scrpit as variable. Default test times is 2000. Default repeat times is 1.
+
+Options:
+In order to achieve multiple functions with one script, the following options are created:
+-e  ends slide simulation.
+        During this simulation: DNA damages ends slide into each other step by step, and the longgest annealing length is recorded.
+
+            5'NNNNNNNNNNNNNNNNNNNNN3'
+
+                                           3'NNNNNNNNNNNNNNNNNNNNNNNNNNNNN5'
+
+            ------------------------------------------------------------
+
+            5'NNNNNNNNNNNNNNNNNNNNN3'
+                                  |
+                                3'NNNNNNNNNNNNNNNNNNNN5'
+
+            ------------------------------------------------------------
+
+            5'NNNNNNNNNNNNNNNNNNNNN3'
+                                 |
+                               3'NNNNNNNNNNNNNNNNNNNN5'
+
+            ------------------------------------------------------------
+
+            5'NNNNNNNNNNNNNNNNNNNNN3'
+                                | |
+                              3'NNNNNNNNNNNNNNNNNNNN5'
+
+            ------------------------------------------------------------
+
+            5'NNNNNNNNNNNNNNNNNNNNN3'
+                         ||||  |  |
+                    3'NNNNNNNNNNNNNNNNNNNN5'
+
+-i  ends invision simulation.
+            During this simulation: DNA damages ends invade into double stranded DNA, and the longgest annealing length is recorded.
+
+                5'NNNNNNNNNNNNNNNNNNNNN3'      5'NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN3'
+                                                 ||||||||||||||||||||||||||||||||||||||
+                                               3'NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN5'
+
+                ------------------------------------------------------------
+
+                5'NNNNNNNNNNNNNNNNNNNN
+                                      N3'
+                                      |
+                   3'NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN5'
+
+                ------------------------------------------------------------
+
+                5'NNNNNNNNNNNNNNNNNNN
+                                     NN3'
+                                     ||
+                   3'NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN5'
+
+                ------------------------------------------------------------
+
+                5'NNNNNNNNNNNNNNNNNN
+                                    NNN3'
+                                    |||
+                   3'NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN5'
+
+                ------------------------------------------------------------
+
+                5'NNNNNNNNNNNNNNNNN
+                                   NNNN3'
+                                   ||||
+                   3'NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN5'
+
+-m  middle annealing. Please refer to the suppliment data for details.
+
+Example Bash command:
+To simulate 3000 random annealing for 10 times:
+python Random_stimulation.py 3000 10
+To simulate 5000 random annealing for 1 time:
+python Random_stimulation.py 5000
 '''
 
 import sys
 import random
 from Bio import SeqIO
 from Bio.Seq import Seq
+
+end_slide_model         = "-e" in sys.argv
+end_invistion_model     = "-i" in sys.argv
+middle_annealing_model  = "-m" in sys.argv
+if not end_slide_model and not end_invistion_model:
+    middle_annealing_model = True
 
 def Extension(path,n):
     input=SeqIO.read(path,"fasta")
@@ -114,9 +194,15 @@ for i in range(test_repeats):
         right=random.randint(0,lenth-1)
         if left == right:
             continue
-        Homologylength_result[Homologylength(DIK_set[left],DIK_set[right])]+=1
-        #Homologylength_result[Homologylength_end(DIK_set[left],DIK_set[right])]+=1
-        #Homologylength_result[Homologylength_end_invasion(DIK_set[left],DIK_set[right])]+=1
+        if middle_annealing_model:
+            Homologylength_result[Homologylength(DIK_set[left],DIK_set[right])]+=1
+            continue
+        if end_slide_model:
+            Homologylength_result[Homologylength_end(DIK_set[left],DIK_set[right])]+=1
+            continue
+        if end_invistion_model:
+            Homologylength_result[Homologylength_end_invasion(DIK_set[left],DIK_set[right])]+=1
+            continue
     temp=[]
     for l in range(27):
         #print ('{:<10}{:<10}'.format(str(i),str(float(Homologylength_result[i])/float(sys.argv[1])*100)))
