@@ -5,9 +5,9 @@ Damage ends will randomly anneal at the joining site. If no base-pairs form duri
 Test number and repeat times are passed to this scrpit as variable. Default test times is 2000. Default repeat times is 1.
 
 Options:
-In order to achieve multiple functions with one script, the following options are created:
--e  ends slide simulation.
-        During this simulation: DNA damages ends slide into each other step by step, and the longgest annealing length is recorded.
+To achieve multiple functions with one script, I set the following options:
+-e  Ends slide simulation.
+        During this simulation: DNA damages ends slide into each other step by step, and the longest annealing length is recorded.
 
             5'NNNNNNNNNNNNNNNNNNNNN3'
 
@@ -37,8 +37,8 @@ In order to achieve multiple functions with one script, the following options ar
                          ||||  |  |
                     3'NNNNNNNNNNNNNNNNNNNN5'
 
--i  ends invasion simulation.
-            During this simulation: DNA damages ends invade into double stranded DNA, and the longgest annealing length is recorded.
+-i  Ends invasion simulation.
+            During this simulation: DNA damages ends invade into double-stranded DNA, and the longest annealing length is recorded.
 
                 5'NNNNNNNNNNNNNNNNNNNNN3'      5'NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN3'
                                                  ||||||||||||||||||||||||||||||||||||||
@@ -72,13 +72,17 @@ In order to achieve multiple functions with one script, the following options ar
                                    ||||
                    3'NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN5'
 
--m  middle annealing. Please refer to the suppliment data for details.
+-m  Middle annealing. Please refer to the supplement data for details.
 
 Example Bash command:
 To simulate 3000 random annealing for 10 times:
-python Random_stimulation.py 3000 10
+    python Random_stimulation.py 3000 10
 To simulate 5000 random annealing for 1 time:
-python Random_stimulation.py 5000
+    python Random_stimulation.py 5000
+To simulate 1000 random annealing for 10 time with the Ends slide model:
+    python Random_stimulation.py 1000 10 -e
+To simulate 8000 random annealing for 1 time with the End invation model:
+    python Random_stimulation.py 1000 -i
 '''
 
 import sys
@@ -183,6 +187,8 @@ lenth=len(DIK_set)
 try: test_times = int(sys.argv[1])
 except: test_times = 2000
 try: test_repeats = int(sys.argv[2])
+if test_repeats == "-m" or test_repeats == "-i" or test_repeats == "-e":
+    test_repeats = 1
 except: test_repeats = 1
 combined_result=[]
 Homologylength_result={}
