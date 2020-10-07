@@ -37,7 +37,7 @@ In order to achieve multiple functions with one script, the following options ar
                          ||||  |  |
                     3'NNNNNNNNNNNNNNNNNNNN5'
 
--i  ends invision simulation.
+-i  ends invasion simulation.
             During this simulation: DNA damages ends invade into double stranded DNA, and the longgest annealing length is recorded.
 
                 5'NNNNNNNNNNNNNNNNNNNNN3'      5'NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN3'
@@ -46,28 +46,28 @@ In order to achieve multiple functions with one script, the following options ar
 
                 ------------------------------------------------------------
 
-                5'NNNNNNNNNNNNNNNNNNNN
+                 5'NNNNNNNNNNNNNNNNNNNN
                                       N3'
                                       |
                    3'NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN5'
 
                 ------------------------------------------------------------
 
-                5'NNNNNNNNNNNNNNNNNNN
+                 5'NNNNNNNNNNNNNNNNNNN
                                      NN3'
                                      ||
                    3'NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN5'
 
                 ------------------------------------------------------------
 
-                5'NNNNNNNNNNNNNNNNNN
+                 5'NNNNNNNNNNNNNNNNNN
                                     NNN3'
                                     |||
                    3'NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN5'
 
                 ------------------------------------------------------------
 
-                5'NNNNNNNNNNNNNNNNN
+                 5'NNNNNNNNNNNNNNNNN
                                    NNNN3'
                                    ||||
                    3'NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN5'
@@ -87,9 +87,9 @@ from Bio import SeqIO
 from Bio.Seq import Seq
 
 end_slide_model         = "-e" in sys.argv
-end_invistion_model     = "-i" in sys.argv
+end_invasion_model      = "-i" in sys.argv
 middle_annealing_model  = "-m" in sys.argv
-if not end_slide_model and not end_invistion_model:
+if not end_slide_model and not end_invasion_model:
     middle_annealing_model = True
 
 def Extension(path,n):
@@ -200,7 +200,7 @@ for i in range(test_repeats):
         if end_slide_model:
             Homologylength_result[Homologylength_end(DIK_set[left],DIK_set[right])]+=1
             continue
-        if end_invistion_model:
+        if end_invasion_model:
             Homologylength_result[Homologylength_end_invasion(DIK_set[left],DIK_set[right])]+=1
             continue
     temp=[]
@@ -208,7 +208,7 @@ for i in range(test_repeats):
         #print ('{:<10}{:<10}'.format(str(i),str(float(Homologylength_result[i])/float(sys.argv[1])*100)))
         temp.append(float(Homologylength_result[l])/float(sys.argv[1])*100)
     combined_result.append(temp)
-for i in range(15):
+for i in range(27):
     for j in range(test_repeats):
         if j < test_repeats-1:
             print('{:.2f}'.format(float(combined_result[j][i])), end = ',')
