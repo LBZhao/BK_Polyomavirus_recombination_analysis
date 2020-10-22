@@ -16,6 +16,8 @@ In order to achieve multiple functions with one script, the following options ar
 -b  output break sites in pairs into CSV file
     -d  duplication will be removed from final results
     -s  output break sites in one column into CSV file
+    -r  Circular genome rotation. This options is used to rotate the genome. To facilitate circular diagram drawing. To use this function, provide a integer following to this option.
+        For example, -r 2000 will make the 2001st nucleotide as the first base. Rotate the circular genome by 2000 bp.
 Example Bash command:
     faslist=`ls ./*.fas`
     for eachfile in $faslist
@@ -36,7 +38,10 @@ alignment_function      = "-a" in sys.argv
 break_function          = "-b" in sys.argv
 duplication             = "-d" in sys.argv
 single_column           = "-s" in sys.argv
+rotation_function       = "-r" in sys.argv
 
+if rotation_function:
+    rotation_distance=int(sys.argv[sys.argv.index("-r")+1])
 #Define a function to isolate the joint.
 def jointfinder(left,read,right):
     result=[[],[],[]]
@@ -323,30 +328,92 @@ if microhomology_function:
         lengthhomo_file.write(str(item)+'\n')
     if break_function:
         if single_column:
-            for item in nonhomocatch:
-                (a,b)=item
-                nonhomo_file.write(str(a)+'\n'+str(b)+'\n')
-            for item in yeshomocatch:
-                (a,b)=item
-                yeshomo_file.write(str(a)+'\n'+str(b)+'\n')
+            if rotation_function:
+                for item in nonhomocatch:
+                    (a,b)=item
+                    if a > rotation_distance:
+                        a -= rotation_distance
+                    else: a += (genomelength - rotation_distance)
+                    if b > rotation_distance:
+                        b -= rotation_distance
+                    else: b += (genomelength - rotation_distance)
+                    nonhomo_file.write(str(a)+'\n'+str(b)+'\n')
+                for item in yeshomocatch:
+                    (a,b)=item
+                    if a > rotation_distance:
+                        a -= rotation_distance
+                    else: a += (genomelength - rotation_distance)
+                    if b > rotation_distance:
+                        b -= rotation_distance
+                    else: b += (genomelength - rotation_distance)
+                    yeshomo_file.write(str(a)+'\n'+str(b)+'\n')
+            else:
+                for item in nonhomocatch:
+                    (a,b)=item
+                    nonhomo_file.write(str(a)+'\n'+str(b)+'\n')
+                for item in yeshomocatch:
+                    (a,b)=item
+                    yeshomo_file.write(str(a)+'\n'+str(b)+'\n')
         else:
-            for item in nonhomocatch:
-                (a,b)=item
-                nonhomo_file.write(str(a)+','+str(b)+'\n')
-            for item in yeshomocatch:
-                (a,b)=item
-                yeshomo_file.write(str(a)+','+str(b)+'\n')
+            if rotation_function:
+                for item in nonhomocatch:
+                    (a,b)=item
+                    if a > rotation_distance:
+                        a -= rotation_distance
+                    else: a += (genomelength - rotation_distance)
+                    if b > rotation_distance:
+                        b -= rotation_distance
+                    else: b += (genomelength - rotation_distance)
+                    nonhomo_file.write(str(a)+','+str(b)+'\n')
+                for item in yeshomocatch:
+                    (a,b)=item
+                    if a > rotation_distance:
+                        a -= rotation_distance
+                    else: a += (genomelength - rotation_distance)
+                    if b > rotation_distance:
+                        b -= rotation_distance
+                    else: b += (genomelength - rotation_distance)
+                    yeshomo_file.write(str(a)+','+str(b)+'\n')
+            else:
+                for item in nonhomocatch:
+                    (a,b)=item
+                    nonhomo_file.write(str(a)+','+str(b)+'\n')
+                for item in yeshomocatch:
+                    (a,b)=item
+                    yeshomo_file.write(str(a)+','+str(b)+'\n')
         nonhomo_file.close()
         yeshomo_file.close()
     lengthhomo_file.close()
 else:
     if break_function:
         if single_column:
-            for item in breakcatch:
-                (a,b)=item
-                breakpoint_file.write(str(a)+'\n'+str(b)+'\n')
+            if rotation_function:
+                for item in breakcatch:
+                    (a,b)=item
+                    if a > rotation_distance:
+                        a -= rotation_distance
+                    else: a += (genomelength - rotation_distance)
+                    if b > rotation_distance:
+                        b -= rotation_distance
+                    else: b += (genomelength - rotation_distance)
+                    breakpoint_file.write(str(a)+'\n'+str(b)+'\n')
+            else:
+                for item in breakcatch:
+                    (a,b)=item
+                    breakpoint_file.write(str(a)+'\n'+str(b)+'\n')
         else:
-            for item in breakcatch:
-                (a,b)=item
-                breakpoint_file.write(str(a)+','+str(b)+'\n')
+            if rotation_function:
+                for item in breakcatch:
+                    (a,b)=item
+                    if a > rotation_distance:
+                        a -= rotation_distance
+                    else: a += (genomelength - rotation_distance)
+                    if b > rotation_distance:
+                        b -= rotation_distance
+                    else: b += (genomelength - rotation_distance)
+                    breakpoint_file.write(str(a)+','+str(b)+'\n')
+            else:
+                for item in breakcatch:
+                    (a,b)=item
+                    breakpoint_file.write(str(a)+','+str(b)+'\n')
         breakpoint_file.close()
