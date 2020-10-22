@@ -1,11 +1,12 @@
 '''
+This script is used to analyze recombination between BK polyomavirus and host cell genome (whole human genome).
 To use this script. Run blast with command
 blastn -query 'input FASTA file path' -db nt -out 'output file path' -outfmt "10 qseqid qstart qend sstart send frames sseq qseq stitle" -gilist 'GI mask file' -num_threads 3
-Failed to use the -outfmt -outfmt "10 qseqid qstart qend sstart send frames sseq qseq stitle" will cause error.
-The idea of this script is format the blast file to reflect recombination.
+Failed to use the -outfmt "10 qseqid qstart qend sstart send frames sseq qseq stitle" will cause an error.
+The idea of this script is to format the blast file to reflect recombination.
 In order to achieve multiple functions with one script, the following options are created:
 -m  output microhomology length in CSV file
-    -n  non-gap, gap will not be considered as match in this mode
+    -n  non-gap, a gap will not be considered as a match in this mode
         for example, AATAA and AA-AA is considered as a match without this mode.
     -d  duplication will be removed from final results
     -b  output NHEJ and MMEJ break sites, break sites will be output in pairs into CSV file
