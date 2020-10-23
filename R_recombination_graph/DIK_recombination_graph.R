@@ -10,6 +10,7 @@ library(ggraph)
 library(igraph)
 library(tidyverse)
 library(stringr)
+library(dplyr)
 
 args = commandArgs(trailingOnly=TRUE)
 png(filename = paste(str_sub(args[1],end=-5),".png"), width = 1200, height = 1100, units = "px")
@@ -18,6 +19,7 @@ if (length(args)<2) {
   stop("Please provide Connection file and option -N for NCCR or -T for total genome", call.=FALSE)
 } else if (args[2] == "-N"){
 Connection <- read.csv(file=args[1], header=FALSE, sep=",")
+Connection <- filter(Connection, (V1<376 & V2<376))
 d1=data.frame(from=c("origin", "origin", "origin", "origin", "origin"), to=c("O","P","Q", "R", "S"))
 d2=data.frame(from="O", to=paste("subgroup", seq(1,142), sep="_"))
 d3=data.frame(from="P", to=paste("subgroup", seq(143,210), sep="_"))
