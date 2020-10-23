@@ -250,18 +250,74 @@ for record in SeqIO.parse(sys.argv[1], "fasta"):
     #Solve Circular issue by connect ends.
     for i in range(len(recombination_result)-1):
         #Solve Circular issue by connect ends.
-        if recombination_result[i][4] == 1 and recombination_result[i+1][3] == len(BKloop):
+        if recombination_result[i][4] == 1 and recombination_result[i+1][3] == genomelength:
             recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4],recombination_result[i][5],recombination_result[i][6]+recombination_result[i+1][6],recombination_result[i][7]+recombination_result[i+1][7],recombination_result[i][8]])
             recombination_result.pop(i+1)
             recombination_result.pop(i+1)
             #print("alart", [i[1:5] for i in recombination_result])
             break
-        if recombination_result[i][4] == len(BKloop) and recombination_result[i+1][3] == 1:
+        if recombination_result[i][4] == genomelength and recombination_result[i+1][3] == 1:
             recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4],recombination_result[i][5],recombination_result[i][6]+recombination_result[i+1][6],recombination_result[i][7]+recombination_result[i+1][7],recombination_result[i][8]])
             recombination_result.pop(i+1)
             recombination_result.pop(i+1)
             #print("alart1", [i[1:5] for i in recombination_result])
             break
+
+        #Solve Circular issue by connect ends. Tolorate 1bp gap.
+        if recombination_result[i][4] == 2 and recombination_result[i+1][3] == genomelength:
+            recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4]])
+            recombination_result.pop(i+1)
+            recombination_result.pop(i+1)
+            break
+        if recombination_result[i][4] == genomelength and recombination_result[i+1][3] == 2:
+            recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4]])
+            recombination_result.pop(i+1)
+            recombination_result.pop(i+1)
+            break
+        if recombination_result[i][4] == 1 and recombination_result[i+1][3] == len(BKloop)-1:
+            recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4]])
+            recombination_result.pop(i+1)
+            recombination_result.pop(i+1)
+            break
+        if recombination_result[i][4] == genomelength-1 and recombination_result[i+1][3] == 1:
+            recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4]])
+            recombination_result.pop(i+1)
+            recombination_result.pop(i+1)
+            break
+
+        #Solve Circular issue by connect ends. Tolorate 2bp gap.
+        if recombination_result[i][4] == 2 and recombination_result[i+1][3] == genomelength-1:
+            recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4]])
+            recombination_result.pop(i+1)
+            recombination_result.pop(i+1)
+            break
+        if recombination_result[i][4] == genomelength-1 and recombination_result[i+1][3] == 2:
+            recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4]])
+            recombination_result.pop(i+1)
+            recombination_result.pop(i+1)
+            break
+        if recombination_result[i][4] == 3 and recombination_result[i+1][3] == genomelength:
+            recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4]])
+            recombination_result.pop(i+1)
+            recombination_result.pop(i+1)
+            break
+        if recombination_result[i][4] == genomelength and recombination_result[i+1][3] == 3:
+            recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4]])
+            recombination_result.pop(i+1)
+            recombination_result.pop(i+1)
+            break
+        if recombination_result[i][4] == 1 and recombination_result[i+1][3] == genomelength-2:
+            recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4]])
+            recombination_result.pop(i+1)
+            recombination_result.pop(i+1)
+            break
+        if recombination_result[i][4] == genomelength-2 and recombination_result[i+1][3] == 1:
+            recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4]])
+            recombination_result.pop(i+1)
+            recombination_result.pop(i+1)
+            break
+
+
 
     if len(recombination_result)==1:
         continue
