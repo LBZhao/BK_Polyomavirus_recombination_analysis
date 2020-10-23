@@ -265,61 +265,59 @@ for record in SeqIO.parse(sys.argv[1], "fasta"):
 
         #Solve Circular issue by connect ends. Tolorate 1bp gap.
         if recombination_result[i][4] == 2 and recombination_result[i+1][3] == genomelength:
-            recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4]])
+            recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4],recombination_result[i][5],recombination_result[i][6]+"-"+recombination_result[i+1][6],recombination_result[i][7]+"-"+recombination_result[i+1][7],recombination_result[i][8]])
             recombination_result.pop(i+1)
             recombination_result.pop(i+1)
             break
         if recombination_result[i][4] == genomelength and recombination_result[i+1][3] == 2:
-            recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4]])
+            recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4],recombination_result[i][5],recombination_result[i][6]+"-"+recombination_result[i+1][6],recombination_result[i][7]+"-"+recombination_result[i+1][7],recombination_result[i][8]])
             recombination_result.pop(i+1)
             recombination_result.pop(i+1)
             break
         if recombination_result[i][4] == 1 and recombination_result[i+1][3] == len(BKloop)-1:
-            recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4]])
+            recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4],recombination_result[i][5],recombination_result[i][6]+"-"+recombination_result[i+1][6],recombination_result[i][7]+"-"+recombination_result[i+1][7],recombination_result[i][8]])
             recombination_result.pop(i+1)
             recombination_result.pop(i+1)
             break
         if recombination_result[i][4] == genomelength-1 and recombination_result[i+1][3] == 1:
-            recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4]])
+            recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4],recombination_result[i][5],recombination_result[i][6]+"-"+recombination_result[i+1][6],recombination_result[i][7]+"-"+recombination_result[i+1][7],recombination_result[i][8]])
             recombination_result.pop(i+1)
             recombination_result.pop(i+1)
             break
 
         #Solve Circular issue by connect ends. Tolorate 2bp gap.
         if recombination_result[i][4] == 2 and recombination_result[i+1][3] == genomelength-1:
-            recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4]])
+            recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4],recombination_result[i][5],recombination_result[i][6]+"--"+recombination_result[i+1][6],recombination_result[i][7]+"--"+recombination_result[i+1][7],recombination_result[i][8]])
             recombination_result.pop(i+1)
             recombination_result.pop(i+1)
             break
         if recombination_result[i][4] == genomelength-1 and recombination_result[i+1][3] == 2:
-            recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4]])
+            recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4],recombination_result[i][5],recombination_result[i][6]+"--"+recombination_result[i+1][6],recombination_result[i][7]+"--"+recombination_result[i+1][7],recombination_result[i][8]])
             recombination_result.pop(i+1)
             recombination_result.pop(i+1)
             break
         if recombination_result[i][4] == 3 and recombination_result[i+1][3] == genomelength:
-            recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4]])
+            recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4],recombination_result[i][5],recombination_result[i][6]+"--"+recombination_result[i+1][6],recombination_result[i][7]+"--"+recombination_result[i+1][7],recombination_result[i][8]])
             recombination_result.pop(i+1)
             recombination_result.pop(i+1)
             break
         if recombination_result[i][4] == genomelength and recombination_result[i+1][3] == 3:
-            recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4]])
+            recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4],recombination_result[i][5],recombination_result[i][6]+"--"+recombination_result[i+1][6],recombination_result[i][7]+"--"+recombination_result[i+1][7],recombination_result[i][8]])
             recombination_result.pop(i+1)
             recombination_result.pop(i+1)
             break
         if recombination_result[i][4] == 1 and recombination_result[i+1][3] == genomelength-2:
-            recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4]])
+            recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4],recombination_result[i][5],recombination_result[i][6]+"--"+recombination_result[i+1][6],recombination_result[i][7]+"--"+recombination_result[i+1][7],recombination_result[i][8]])
             recombination_result.pop(i+1)
             recombination_result.pop(i+1)
             break
         if recombination_result[i][4] == genomelength-2 and recombination_result[i+1][3] == 1:
-            recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4]])
+            recombination_result.insert(i,[recombination_result[i][0],recombination_result[i][1],recombination_result[i+1][2],recombination_result[i][3],recombination_result[i+1][4],recombination_result[i][5],recombination_result[i][6]+"--"+recombination_result[i+1][6],recombination_result[i][7]+"--"+recombination_result[i+1][7],recombination_result[i][8]])
             recombination_result.pop(i+1)
             recombination_result.pop(i+1)
             break
 
-
-
-    if len(recombination_result)==1:
+    if len(recombination_result)==1 or len(recombination_result)==0:
         continue
 
     #Starting from this line. All information that is necesssory to build the graph will be acquired.
@@ -389,6 +387,8 @@ if microhomology_function:
             if rotation_function:
                 for item in nonhomocatch:
                     (a,b)=item
+                    if a == b:
+                        continue
                     if a > rotation_distance:
                         a -= rotation_distance
                     else: a += (genomelength - rotation_distance)
@@ -398,6 +398,8 @@ if microhomology_function:
                     nonhomo_file.write(str(a)+'\n'+str(b)+'\n')
                 for item in yeshomocatch:
                     (a,b)=item
+                    if a == b:
+                        continue
                     if a > rotation_distance:
                         a -= rotation_distance
                     else: a += (genomelength - rotation_distance)
@@ -408,14 +410,20 @@ if microhomology_function:
             else:
                 for item in nonhomocatch:
                     (a,b)=item
+                    if a == b:
+                        continue
                     nonhomo_file.write(str(a)+'\n'+str(b)+'\n')
                 for item in yeshomocatch:
                     (a,b)=item
+                    if a == b:
+                        continue
                     yeshomo_file.write(str(a)+'\n'+str(b)+'\n')
         else:
             if rotation_function:
                 for item in nonhomocatch:
                     (a,b)=item
+                    if a == b:
+                        continue
                     if a > rotation_distance:
                         a -= rotation_distance
                     else: a += (genomelength - rotation_distance)
@@ -425,6 +433,8 @@ if microhomology_function:
                     nonhomo_file.write(str(a)+','+str(b)+'\n')
                 for item in yeshomocatch:
                     (a,b)=item
+                    if a == b:
+                        continue
                     if a > rotation_distance:
                         a -= rotation_distance
                     else: a += (genomelength - rotation_distance)
@@ -435,9 +445,13 @@ if microhomology_function:
             else:
                 for item in nonhomocatch:
                     (a,b)=item
+                    if a == b:
+                        continue
                     nonhomo_file.write(str(a)+','+str(b)+'\n')
                 for item in yeshomocatch:
                     (a,b)=item
+                    if a == b:
+                        continue
                     yeshomo_file.write(str(a)+','+str(b)+'\n')
         nonhomo_file.close()
         yeshomo_file.close()
@@ -448,6 +462,8 @@ else:
             if rotation_function:
                 for item in breakcatch:
                     (a,b)=item
+                    if a == b:
+                        continue
                     if a > rotation_distance:
                         a -= rotation_distance
                     else: a += (genomelength - rotation_distance)
@@ -458,11 +474,15 @@ else:
             else:
                 for item in breakcatch:
                     (a,b)=item
+                    if a == b:
+                        continue
                     breakpoint_file.write(str(a)+'\n'+str(b)+'\n')
         else:
             if rotation_function:
                 for item in breakcatch:
                     (a,b)=item
+                    if a == b:
+                        continue
                     if a > rotation_distance:
                         a -= rotation_distance
                     else: a += (genomelength - rotation_distance)
@@ -473,5 +493,7 @@ else:
             else:
                 for item in breakcatch:
                     (a,b)=item
+                    if a == b:
+                        continue
                     breakpoint_file.write(str(a)+','+str(b)+'\n')
         breakpoint_file.close()

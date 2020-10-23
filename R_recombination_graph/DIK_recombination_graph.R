@@ -16,9 +16,8 @@ png(filename = paste(str_sub(args[1],end=-5),".png"), width = 1200, height = 110
 
 if (length(args)<2) {
   stop("Please provide Connection file and option -N for NCCR or -T for total genome", call.=FALSE)
-Connection <- read.csv(file=args[1], header=FALSE, sep=",")
-
 } else if (args[2] == "-N"){
+Connection <- read.csv(file=args[1], header=FALSE, sep=",")
 d1=data.frame(from=c("origin", "origin", "origin", "origin", "origin"), to=c("O","P","Q", "R", "S"))
 d2=data.frame(from="O", to=paste("subgroup", seq(1,142), sep="_"))
 d3=data.frame(from="P", to=paste("subgroup", seq(143,210), sep="_"))
@@ -29,6 +28,7 @@ hierarchy=rbind(d1, d2, d3, d4, d5, d6)
 Connection$V3 <- with(Connection, V1+6)
 Connection$V4 <- with(Connection, V2+6)
 } else if (args[2] == "-T"){
+  Connection <- read.csv(file=args[1], header=FALSE, sep=",")
   d1=data.frame(from=c("origin","origin","origin"), to=c("NCCR", "LATE", "EARLY"))
   d2=data.frame(from="NCCR", to=paste("subgroup", seq(1,375), sep="_"))
   d3=data.frame(from="LATE", to=paste("subgroup", seq(376,2676), sep="_"))
