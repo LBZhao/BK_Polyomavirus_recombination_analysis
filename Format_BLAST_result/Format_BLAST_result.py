@@ -41,7 +41,9 @@ single_column           = "-s" in sys.argv
 rotation_function       = "-r" in sys.argv
 
 if rotation_function:
-    rotation_distance=int(sys.argv[sys.argv.index("-r")+1])
+    if sys.argv[sys.argv.index("-r")+1].isnumeric():
+        rotation_distance=int(sys.argv[sys.argv.index("-r")+1])
+    else: raise ValueError("No rotation parameter!")
 #Define a function to isolate the joint.
 def jointfinder(left,read,right):
     result=[[],[],[]]
