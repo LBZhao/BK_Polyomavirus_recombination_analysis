@@ -13,7 +13,7 @@ library(stringr)
 library(dplyr)
 
 args = commandArgs(trailingOnly=TRUE)
-png(filename = paste(str_sub(args[1],end=-5),".png"), width = 1200, height = 1100, units = "px")
+png(filename = paste(str_sub(args[1],end=-5),args[2],".png",sep = ""), width = 1200, height = 1100, units = "px")
 
 if (length(args)<2) {
   stop("Please provide Connection file and option -N for NCCR or -T for total genome", call.=FALSE)
