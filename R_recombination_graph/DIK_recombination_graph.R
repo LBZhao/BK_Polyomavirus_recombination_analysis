@@ -13,7 +13,7 @@ library(stringr)
 library(dplyr)
 
 args = commandArgs(trailingOnly=TRUE)
-png(filename = paste(str_sub(args[1],end=-5),args[2],".png",sep = ""), width = 1200, height = 1100, units = "px")
+png(filename = paste(str_sub(args[1],end=-5),args[2],".png",sep = ""), width = 1200, height = 1200, units = "px")
 
 if (length(args)<2) {
   stop("Please provide Connection file and option -N for NCCR or -T for total genome", call.=FALSE)
@@ -31,6 +31,7 @@ Connection$V3 <- with(Connection, V1+6)
 Connection$V4 <- with(Connection, V2+6)
 } else if (args[2] == "-T"){
   Connection <- read.csv(file=args[1], header=FALSE, sep=",")
+  #Connection <- sample_n(Connection, 20000)
   d1=data.frame(from=c("origin","origin","origin"), to=c("NCCR", "LATE", "EARLY"))
   d2=data.frame(from="NCCR", to=paste("subgroup", seq(1,375), sep="_"))
   d3=data.frame(from="LATE", to=paste("subgroup", seq(376,2676), sep="_"))
@@ -58,7 +59,7 @@ p=ggraph(mygraph, layout = 'dendrogram', circular = TRUE) +
 library(RColorBrewer)
 if (args[2] == "-N"){
 p +  geom_conn_bundle(data = get_con(from = from, to = to), width=0.9, alpha=0.02, colour="dodgerblue4", tension=0.9) +
-  geom_node_point(aes(filter = leaf, x = x*1.05, y=y*1.05, colour=group),   size=5) +
+  geom_node_point(aes(filter = leaf, x = x*1.05, y=y*1.05, colour=group),   size=5, show.legend=FALSE) +
   scale_colour_manual(values= rep( brewer.pal(5,"Set1") , 30))
 } else if (args[2] == "-T"){
 p +  geom_conn_bundle(data = get_con(from = from, to = to), width=0.9, alpha=0.02, colour="dodgerblue4", tension=0.4) +
