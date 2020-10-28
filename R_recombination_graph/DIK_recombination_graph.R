@@ -63,7 +63,7 @@ p +  geom_conn_bundle(data = get_con(from = from, to = to), width=0.9, alpha=0.0
   scale_colour_manual(values= rep( brewer.pal(5,"Set1") , 30))
 } else if (args[2] == "-T"){
 p +  geom_conn_bundle(data = get_con(from = from, to = to), width=0.9, alpha=0.02, colour="dodgerblue4", tension=0.4) +
-  geom_node_point(aes(filter = leaf, x = x*1.05, y=y*1.05, colour=group),   size=5) +
+  geom_node_point(aes(filter = leaf, x = x*1.05, y=y*1.05, colour=group),   size=5, show.legend=FALSE) +
   scale_colour_manual(values= rep( brewer.pal(3,"Set1") , 30))
 }
 
