@@ -387,8 +387,6 @@ if microhomology_function:
             if rotation_function:
                 for item in nonhomocatch:
                     (a,b)=item
-                    if a == b:
-                        continue
                     if a > rotation_distance:
                         a -= rotation_distance
                     else: a += (genomelength - rotation_distance)
@@ -398,8 +396,6 @@ if microhomology_function:
                     nonhomo_file.write(str(a)+'\n'+str(b)+'\n')
                 for item in yeshomocatch:
                     (a,b)=item
-                    if a == b:
-                        continue
                     if a > rotation_distance:
                         a -= rotation_distance
                     else: a += (genomelength - rotation_distance)
@@ -410,20 +406,14 @@ if microhomology_function:
             else:
                 for item in nonhomocatch:
                     (a,b)=item
-                    if a == b:
-                        continue
                     nonhomo_file.write(str(a)+'\n'+str(b)+'\n')
                 for item in yeshomocatch:
                     (a,b)=item
-                    if a == b:
-                        continue
                     yeshomo_file.write(str(a)+'\n'+str(b)+'\n')
         else:
             if rotation_function:
                 for item in nonhomocatch:
                     (a,b)=item
-                    if a == b:
-                        continue
                     if a > rotation_distance:
                         a -= rotation_distance
                     else: a += (genomelength - rotation_distance)
@@ -433,8 +423,6 @@ if microhomology_function:
                     nonhomo_file.write(str(a)+','+str(b)+'\n')
                 for item in yeshomocatch:
                     (a,b)=item
-                    if a == b:
-                        continue
                     if a > rotation_distance:
                         a -= rotation_distance
                     else: a += (genomelength - rotation_distance)
@@ -445,13 +433,9 @@ if microhomology_function:
             else:
                 for item in nonhomocatch:
                     (a,b)=item
-                    if a == b:
-                        continue
                     nonhomo_file.write(str(a)+','+str(b)+'\n')
                 for item in yeshomocatch:
                     (a,b)=item
-                    if a == b:
-                        continue
                     yeshomo_file.write(str(a)+','+str(b)+'\n')
         nonhomo_file.close()
         yeshomo_file.close()
@@ -474,15 +458,11 @@ else:
             else:
                 for item in breakcatch:
                     (a,b)=item
-                    if a == b:
-                        continue
                     breakpoint_file.write(str(a)+'\n'+str(b)+'\n')
         else:
             if rotation_function:
                 for item in breakcatch:
                     (a,b)=item
-                    if a == b:
-                        continue
                     if a > rotation_distance:
                         a -= rotation_distance
                     else: a += (genomelength - rotation_distance)
@@ -493,7 +473,5 @@ else:
             else:
                 for item in breakcatch:
                     (a,b)=item
-                    if a == b:
-                        continue
                     breakpoint_file.write(str(a)+','+str(b)+'\n')
         breakpoint_file.close()
