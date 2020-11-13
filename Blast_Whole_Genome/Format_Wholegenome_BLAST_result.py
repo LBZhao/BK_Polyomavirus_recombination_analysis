@@ -7,7 +7,7 @@ The idea of this script is to format the blast file to reflect recombination.
 In order to achieve multiple functions with one script, the following options are created:
 -m  output microhomology length in CSV file
     -n  non-gap, a gap will not be considered as a match in this mode
-        for example, AATAA and AA-AA is considered as a match without this mode.
+        for example, AATAA and AA-AA are considered as a match without this mode.
     -d  duplication will be removed from final results
     -b  output NHEJ and MMEJ break sites, break sites will be output in pairs into CSV file
         -d  duplication will be removed from final results
