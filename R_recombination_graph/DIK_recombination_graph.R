@@ -3,7 +3,7 @@
 # This script will create a circular diagram
 # This script is modified from www.r-graph-gallery.com/310-custom-hierarchical-edge-bundling
 # This script will take options
-# example command in powershell: FOR %G IN (*.csv) DO Rscript "DIK_recombination_graph.R" %G
+# example command in powershell: FOR %G IN (*.csv) DO Rscript "DIK_recombination_graph.R" %G -N
 # -N  diagram of NCCR
 # -T  diagram of total genome
 
