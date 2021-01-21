@@ -186,10 +186,12 @@ lenth=len(DIK_set)
 
 try: test_times = int(sys.argv[1])
 except: test_times = 2000
-try: test_repeats = int(sys.argv[2])
+try: test_repeats = sys.argv[2]
+except: test_repeats = 1
 if test_repeats == "-m" or test_repeats == "-i" or test_repeats == "-e":
     test_repeats = 1
-except: test_repeats = 1
+else:
+    test_repeats = int(test_repeats)
 combined_result=[]
 Homologylength_result={}
 for i in range(test_repeats):
