@@ -59,11 +59,14 @@ p=ggraph(mygraph, layout = 'dendrogram', circular = TRUE) +
 
 library(RColorBrewer)
 if (args[2] == "-N"){
-p +  geom_conn_bundle(data = get_con(from = from, to = to), width=0.4, alpha=1, colour="dodgerblue4", tension=0.9) +
+p +  geom_conn_bundle(data = get_con(from = from, to = to), width=0.9, alpha=0.02, colour="dodgerblue4", tension=0.9) +
+#p +  geom_conn_bundle(data = get_con(from = from, to = to), width=0.4, alpha=1, colour="dodgerblue4", tension=0.9) +
   geom_node_point(aes(filter = leaf, x = x*1.05, y=y*1.05, colour=group),   size=5, show.legend=FALSE) +
   scale_colour_manual(values= rep( brewer.pal(5,"Set1") , 30))
+  #+ geom_conn_bundle(data = get_con(from = 289, to = 328), width=0.9, alpha=1, colour="red", tension=0.9)
 } else if (args[2] == "-T"){
-p +  geom_conn_bundle(data = get_con(from = from, to = to), width=0.4, alpha=1, colour="dodgerblue4", tension=0.4) +
+p +  geom_conn_bundle(data = get_con(from = from, to = to), width=0.9, alpha=0.02, colour="dodgerblue4", tension=0.4) +
+#p +  geom_conn_bundle(data = get_con(from = from, to = to), width=0.4, alpha=1, colour="dodgerblue4", tension=0.4) +
   geom_node_point(aes(filter = leaf, x = x*1.05, y=y*1.05, colour=group),   size=5, show.legend=FALSE) +
   scale_colour_manual(values= rep( brewer.pal(3,"Set1") , 30))
 }
