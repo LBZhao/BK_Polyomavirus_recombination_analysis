@@ -16,7 +16,7 @@ To achieve multiple functions with one script, the following options are created
 -b  output break sites in pairs into CSV file
     -d  duplication will be removed from final results
     -s  output break sites in one column into CSV file
-    -r  Circular genome rotation. This options is used to rotate the genome. To facilitate circular diagram drawing. To use this function, provide a integer following to this option.
+    -r  Circular genome rotation. This option is used to rotate the genome to facilitate circular diagram drawing. To use this function, provide an integer following this option.
         For example, -r 2000 will make the 2001st nucleotide as the first base. Rotate the circular genome by 2000 bp.
 Example Bash command:
     faslist=`ls ./*.fas`

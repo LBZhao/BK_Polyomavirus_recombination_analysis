@@ -75,13 +75,13 @@ To achieve multiple functions with one script, I set the following options:
 -m  Middle annealing. Please refer to the supplement data for details.
 
 Example Bash command:
-To simulate 3000 random annealing for 10 times:
+To simulate 3000 random annealings for 10 times:
     python Random_stimulation.py 3000 10
-To simulate 5000 random annealing for 1 time:
+To simulate 5000 random annealings for 1 time:
     python Random_stimulation.py 5000
-To simulate 1000 random annealing for 10 time with the Ends slide model:
+To simulate 1000 random annealings for 10 time with the Ends slide model:
     python Random_stimulation.py 1000 10 -e
-To simulate 8000 random annealing for 1 time with the End invation model:
+To simulate 8000 random annealings for 1 time with the End invasion model:
     python Random_stimulation.py 1000 -i
 '''
 
@@ -186,10 +186,12 @@ lenth=len(DIK_set)
 
 try: test_times = int(sys.argv[1])
 except: test_times = 2000
-try: test_repeats = int(sys.argv[2])
+try: test_repeats = sys.argv[2]
+except: test_repeats = 1
 if test_repeats == "-m" or test_repeats == "-i" or test_repeats == "-e":
     test_repeats = 1
-except: test_repeats = 1
+else:
+    test_repeats = int(test_repeats)
 combined_result=[]
 Homologylength_result={}
 for i in range(test_repeats):
