@@ -1,6 +1,10 @@
 '''
 To use this script. Run BLAST with command
+
+Examples:
+makeblastdb -in './BK_Dik.fas' -title 'DIK' -parse_seqids -out DIK -dbtype nucl
 blastn -query 'input FASTA file path' -db nt -out 'output file path' -outfmt "10 qseqid qstart qend sstart send frames sseq qseq stitle" -gilist 'GI mask file' -num_threads 3
+
 Failed to use the -outfmt "10 qseqid qstart qend sstart send frames sseq qseq stitle" will cause an error.
 The idea of this script is to format the blast file to reflect recombination.
 To achieve multiple functions with one script, the following options are created:
