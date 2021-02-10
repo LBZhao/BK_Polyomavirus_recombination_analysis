@@ -133,10 +133,6 @@ def Homologylength(a,b):
             if Pair(a[13+i],b[13+i]):
                 n += 1
             else: break
-        for i in range(13):
-            if Pair(a[12-i],b[12-i]):
-                n += 1
-            else: break
         return(n)
     else: return(n)
 
