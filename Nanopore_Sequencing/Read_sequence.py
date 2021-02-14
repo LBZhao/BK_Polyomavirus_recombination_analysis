@@ -13,5 +13,5 @@ from Bio.SeqRecord import SeqRecord
 for j in range(1,len(sys.argv)):
     with open(sys.argv[j], 'rt') as reads, open(sys.argv[j][:-6]+".fas", "w") as collect:
         for record in SeqIO.parse(reads,"fastq"):
-            if len(record.seq) >7500 and len(record.seq) <8500:
+            if len(record.seq) >1000 and len(record.seq) <8500:
                 SeqIO.write(record,collect,"fasta")
