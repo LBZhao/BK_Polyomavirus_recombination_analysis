@@ -38,12 +38,13 @@ from operator import itemgetter, attrgetter
 
 
 #Read Blast result
-inp=open(sys.argv[1][:-4],'r')
+inp=open(sys.argv[1][:-4]+"_blast",'r')
 oneline=inp.readline()
 updated=False
 
 breakcatch=[]
 breakpoint_file=open('./%s_Breakpoints.csv' % sys.argv[1][:-4],'w+')
+catched_sequence=open('./%s_catched_sequence.fas' % sys.argv[1][:-4],'w+')
 
 #Read FASTA file for alignment. !!Not original BLAST File.
 for record in SeqIO.parse(sys.argv[1], "fasta"):
@@ -84,24 +85,36 @@ for record in SeqIO.parse(sys.argv[1], "fasta"):
     temp=[]
     temp1=[]
     temp2=[""]
+    recombination_index=0
+    recombination_index_count=0
     for item in recombination_result:
         temp1.append(item[1])
         temp1.append(item[2])
         temp.append(item[3])
         temp.append(item[4])
+
     if item[5]=="1/-1":
         temp1.reverse()
         temp.reverse()
         for i in range(2,len(temp1),2):
             temp2.append(","+str(temp1[i-1]-temp1[i]))
+            recombination_index+=abs(temp1[i-1]-temp1[i])
+            recombination_index_count+=1
+
     else:
         for i in range(2,len(temp1),2):
             temp2.append(","+str(temp1[i]-temp1[i-1]))
+            recombination_index+=abs(temp1[i]-temp1[i-1])
+            recombination_index_count+=1
 
-    breakcatch.append(temp2)
-    breakcatch.append(temp)
+    if recombination_index/recombination_index_count <=10:
+        breakcatch.append(temp2)
+        breakcatch.append(temp)
+        SeqIO.write(record,catched_sequence,"fasta")
+
 for item in breakcatch:
     breakpoint_file.write(','.join([str(i) for i in item]))
     breakpoint_file.write("\n")
 
 breakpoint_file.close()
+catched_sequence.close()
