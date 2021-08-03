@@ -22,6 +22,7 @@ To achieve multiple functions with one script, the following options are created
     -s  output break sites in one column into CSV file
     -r  Circular genome rotation. This option is used to rotate the genome to facilitate circular diagram drawing. To use this function, provide an integer following this option.
         For example, -r 2000 will make the 2001st nucleotide as the first base. Rotate the circular genome by 2000 bp.
+    -c  Catch seuqencing reads that contain a specific
 Example Bash command:
     faslist=`ls ./*.fas`
     for eachfile in $faslist
@@ -43,11 +44,14 @@ break_function          = "-b" in sys.argv
 duplication             = "-d" in sys.argv
 single_column           = "-s" in sys.argv
 rotation_function       = "-r" in sys.argv
+reads_catch_function    = "-c" in sys.argv
 
 if rotation_function:
     if sys.argv[sys.argv.index("-r")+1].isnumeric():
         rotation_distance=int(sys.argv[sys.argv.index("-r")+1])
     else: raise ValueError("No rotation parameter!")
+
+
 #Define a function to isolate the joint.
 def jointfinder(left,read,right):
     result=[[],[],[]]
@@ -213,7 +217,19 @@ else:
         breakcatch=[]
         breakpoint_file=open('./%s_Breakpoints.csv' % sys.argv[1][:-4],'w+')
 
-
+if reads_catch_function:
+    if sys.argv[sys.argv.index("-c")+1].isnumeric() and sys.argv[sys.argv.index("-c")+2].isnumeric():
+        catch_left=int(sys.argv[sys.argv.index("-c")+1])
+        catch_right=int(sys.argv[sys.argv.index("-c")+2])
+        if rotation_function:
+            if catch_left + rotation_distance <= genomelength:
+                catch_left += rotation_distance
+            else: catch_left += (rotation_distance-genomelength)
+            if catch_right + rotation_distance <= genomelength:
+                catch_right += rotation_distance
+            else: catch_right += (rotation_distance-genomelength)
+        reads_catch_file=open('./%s_%s_%s_reads.fas' % (sys.argv[1][:-4],sys.argv[sys.argv.index("-c")+1],sys.argv[sys.argv.index("-c")+2]),'w+')
+    else: raise ValueError("No catch reads parameter!")
 
 
 #Read FASTA file for alignment. !!Not original BLAST File.
@@ -381,6 +397,11 @@ for record in SeqIO.parse(sys.argv[1], "fasta"):
             if break_function:
                 if temp >-1:
                     breakcatch.append((leftsubjectend,rightsubjectstart))
+                    if reads_catch_function:
+                        if leftsubjectend == catch_left and rightsubjectstart == catch_right:
+                            SeqIO.write(record,reads_catch_file,"fasta")
+                        elif leftsubjectend == catch_right and rightsubjectstart == catch_left:
+                            SeqIO.write(record,reads_catch_file,"fasta")
 
 
 if microhomology_function:
@@ -479,3 +500,5 @@ else:
                     (a,b)=item
                     breakpoint_file.write(str(a)+','+str(b)+'\n')
         breakpoint_file.close()
+if reads_catch_function:
+    reads_catch_file.close()
